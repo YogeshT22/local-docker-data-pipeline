@@ -1,4 +1,4 @@
-# Project: Containerized ETL Data Pipeline
+# Mini Project 2: Containerized ETL Data Pipeline
 
 This project demonstrates a fundamental ETL (Extract, Transform, Load) data pipeline pattern using Python and a PostgreSQL database, all running as isolated services orchestrated by Docker Compose. The key focus is on managing a **stateful** service (the database) and ensuring data persistence across container lifecycles using Docker Volumes.
 
@@ -31,8 +31,8 @@ This project demonstrates a fundamental ETL (Extract, Transform, Load) data pipe
 
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repo-url>
-    cd <your-repo-name>
+    git clone https://github.com/YogeshT22/local-docker-data-pipeline
+    cd local-docker-data-pipeline
     ```
 
 2.  **Run the entire pipeline in detached mode:**
