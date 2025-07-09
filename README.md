@@ -86,3 +86,6 @@ graph TD
     style Producer fill:#a2de96
     style Consumer fill:#96c6de
     style DB fill:#de96a2
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
