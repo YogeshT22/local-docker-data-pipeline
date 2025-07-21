@@ -7,8 +7,8 @@ services:
     container_name: my-postgres-db
     environment:
       - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
-      - POSTGRES_DB=mydatabase
+      - POSTGRES_PASSWORD=mypassword # -> this is vulnerable and Using a secret management tool or passing ENV in runtime is good idea!
+      - POSTGRES_DB=mydatabase      # -> will implement secrets managament or env loaded from .env(.env gets ignored by git)
     ports:
       # Expose the port to the host machine for optional debugging
       - "5432:5432"
