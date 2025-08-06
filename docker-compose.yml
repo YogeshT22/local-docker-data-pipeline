@@ -1,25 +1,27 @@
-version: '3.8'
+# ----------------------------
+# Purpose: Docker Compose file for a local data pipeline using PostgreSQL and Python
+# Target: Local Data Pipeline using Dockerized (PostgreSQL + Python)
+# This is personal work for educational purposes.
+# ----------------------------
+
+version: "3.8"
 
 services:
-  # The PostgreSQL Database Service
   postgres-db:
     image: postgres:14-alpine
     container_name: my-postgres-db
     environment:
       - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword # -> this is vulnerable and Using a secret management tool or passing ENV in runtime is good idea!
-      - POSTGRES_DB=mydatabase      # -> will implement secrets managament or env loaded from .env(.env gets ignored by git)
+      - POSTGRES_PASSWORD=mypassword # Dev note: this is vulnerable and use a secret management tool or passing ENV in runtime is good idea!
+      - POSTGRES_DB=mydatabase # Dev note: will implement secrets managament or env loaded from .env(.env gets ignored by git)
     ports:
-      # Expose the port to the host machine for optional debugging
       - "5432:5432"
     volumes:
-      # This is the key part for data persistence!
-      # It maps a named volume 'db-data' to the standard PostgreSQL data directory.
+      # Dev note: using a named volume to persist data.
       - db-data:/var/lib/postgresql/data
 
-  # The Python service that produces data
   producer-app:
-    build: . # Build the image from the Dockerfile in the current directory
+    build: .
     container_name: my-producer-app
     environment:
       - DB_HOST=postgres-db
@@ -27,12 +29,11 @@ services:
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
     depends_on:
-      - postgres-db # Don't start this container until the db service has started
-    command: python producer.py # Override the default CMD to run the producer
+      - postgres-db
+    command: python producer.py # Dev note: Override the default CMD to run the producer
 
-  # The Python service that consumes data
   consumer-app:
-    build: . # It uses the exact same image as the producer
+    build: .
     container_name: my-consumer-app
     environment:
       - DB_HOST=postgres-db
@@ -40,9 +41,9 @@ services:
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
     depends_on:
-      - producer-app # Start this only after the producer has finished
-    command: python consumer.py # added python consumer.py it was missing in initial code.
+      - producer-app
+    command: python consumer.py # Dev note: added python consumer.py it was missing in initial code.
 
-# The named volume definition
+# Dev note: The named volume definition for PostgreSQL data persistence
 volumes:
-  db-data: # This tells Docker to create and manage a volume named 'db-data'
+  db-data:

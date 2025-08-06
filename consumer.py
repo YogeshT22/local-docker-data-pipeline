@@ -1,6 +1,13 @@
+# ---------------------------
+# purpose: Consumer script to read data from PostgreSQL database
+# target: Local Data Pipeline using Dockerized (PostgreSQL + Python)
+# This is personal work for educational purposes.
+# ---------------------------
+
 import os
 import psycopg2
 import time
+
 
 def get_db_connection():
     """Establishes a connection to the PostgreSQL database."""
@@ -15,26 +22,31 @@ def get_db_connection():
             print("Consumer: Database connection established.")
             return conn
         except psycopg2.OperationalError as e:
-            print(f"Consumer: Connection failed: {e}. Retrying in 5 seconds...")
+            print(
+                f"Consumer: Connection failed: {e}. Retrying in 5 seconds...")
             time.sleep(5)
+
 
 def process_data(conn):
     """Fetches all users from the database and prints them."""
     print("\n--- Reading data from database ---")
     with conn.cursor() as cur:
-        cur.execute("SELECT id, name, email, created_at FROM users ORDER BY created_at DESC;")
+        cur.execute(
+            "SELECT id, name, email, created_at FROM users ORDER BY created_at DESC;")
         users = cur.fetchall()
-        
+
         if not users:
             print("Consumer: No users found in the database yet.")
         else:
             print(f"Consumer: Found {len(users)} user(s) in the database.")
             for user in users:
-                print(f"  - ID: {user[0]}, Name: {user[1]}, Email: {user[2]}, Joined: {user[3]}")
+                print(
+                    f"  - ID: {user[0]}, Name: {user[1]}, Email: {user[2]}, Joined: {user[3]}")
     print("--- Finished reading data ---\n")
 
+
 if __name__ == "__main__":
-    # Give the producer a head start to insert some data
+    # Dev note: Give the producer a head start to insert some data
     print("Consumer: Waiting for 10 seconds before starting...")
     time.sleep(10)
 
